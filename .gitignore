@@ -36,5 +36,11 @@ packages/
 # NuGet
 *.nupkg
 
-# Local
+# Local configuration
 appsettings.Development.json
+
+# VS Code
+.vscode/
+
+# Coverage
+coverage/

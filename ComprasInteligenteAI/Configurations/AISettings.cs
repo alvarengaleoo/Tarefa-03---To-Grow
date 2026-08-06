@@ -6,7 +6,9 @@ public class AISettings
 
     public string Model { get; set; } = string.Empty;
 
-    public double Temperature { get; set; }
-
+    // Controla o tamanho máximo da resposta da IA.
     public int MaxTokens { get; set; }
+
+    // Controla o nível de criatividade da resposta.
+    public double Temperature { get; set; }
 }
