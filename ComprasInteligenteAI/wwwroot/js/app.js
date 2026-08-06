@@ -50,8 +50,6 @@ function esconderMensagem() {
 
 async function analisarCompra() {
 
-    console.log("1 - Iniciou");
-
     esconderMensagem();
 
     const descricao = document.getElementById("descricao").value.trim();
@@ -59,8 +57,6 @@ async function analisarCompra() {
     const departamento = document.getElementById("departamento").value;
 
     const cardResultado = document.getElementById("resultado");
-
-    console.log("2 - Card encontrado:", cardResultado);
 
     cardResultado.classList.add("d-none");
 
@@ -102,11 +98,11 @@ async function analisarCompra() {
 
         });
 
-        console.log("3 - Status:", response.status);
-
         const resultado = await response.json();
 
-        console.log("4 - Resultado:", resultado);
+        if (!response.ok) {
+            throw new Error(resultado.erro || "Erro ao realizar a análise.");
+        }
 
         document.getElementById("categoria").textContent = resultado.categoria;
         document.getElementById("prioridade").textContent = resultado.prioridade;
@@ -114,21 +110,17 @@ async function analisarCompra() {
         document.getElementById("justificativa").textContent = resultado.justificativa;
         document.getElementById("sugestao").textContent = resultado.sugestao;
 
-        console.log("5 - Campos preenchidos");
-
         cardResultado.classList.remove("d-none");
-
-        console.log("6 - Classe:", cardResultado.className);
 
         mostrarMensagem("Análise realizada com sucesso.", "success");
 
     }
     catch (erro) {
 
-        console.error("ERRO:", erro);
+        console.error(erro);
 
         mostrarMensagem(
-            "Não foi possível realizar a análise da compra.",
+            erro.message || "Não foi possível realizar a análise da compra.",
             "danger");
 
     }

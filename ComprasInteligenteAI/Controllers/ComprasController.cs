@@ -16,7 +16,6 @@ public class ComprasController : ControllerBase
         _aiService = aiService;
     }
 
-    // Recebe a solicitação de compra e retorna a análise gerada pela IA.
     [HttpPost("analisar")]
     public async Task<IActionResult> Analisar([FromBody] CompraRequest request)
     {
@@ -41,12 +40,6 @@ public class ComprasController : ControllerBase
                 request.Descricao,
                 request.ValorEstimado,
                 request.Departamento);
-
-            // Exibe exatamente o que a IA retornou.
-            Console.WriteLine("========================================");
-            Console.WriteLine("RESPOSTA DA IA:");
-            Console.WriteLine(resposta);
-            Console.WriteLine("========================================");
 
             var resultado = JsonSerializer.Deserialize<CompraResponse>(
                 resposta,

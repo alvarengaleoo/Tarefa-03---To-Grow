@@ -27,15 +27,23 @@ public class GroqService
         {
             Model = _settings.Model,
             MaxTokens = _settings.MaxTokens,
-            Temperature = _settings.Temperature,
             Messages =
-            [
-                new GroqMessage
-                {
-                    Role = "user",
-                    Content = prompt
-                }
-            ]
+[
+    new GroqMessage
+    {
+        Role = "system",
+        Content = """
+Você é um especialista em compras corporativas.
+Siga rigorosamente todas as instruções fornecidas.
+Nunca ignore as regras.
+"""
+    },
+    new GroqMessage
+    {
+        Role = "user",
+        Content = prompt
+    }
+]
         };
 
         var json = JsonSerializer.Serialize(request);
@@ -58,6 +66,10 @@ public class GroqService
 
             var responseContent = await response.Content.ReadAsStringAsync();
 
+            Console.WriteLine("========== RESPOSTA BRUTA DA GROQ ==========");
+            Console.WriteLine(responseContent);
+            Console.WriteLine("============================================");
+
             if (!response.IsSuccessStatusCode)
             {
                 throw new Exception(
@@ -70,6 +82,10 @@ public class GroqService
                 {
                     PropertyNameCaseInsensitive = true
                 });
+
+            Console.WriteLine("========== TEXTO DA IA ==========");
+            Console.WriteLine(resultado?.Choices.FirstOrDefault()?.Message.Content);
+            Console.WriteLine("================================");
 
             return resultado?.Choices.FirstOrDefault()?.Message.Content
                    ?? "A IA não retornou nenhuma resposta.";
