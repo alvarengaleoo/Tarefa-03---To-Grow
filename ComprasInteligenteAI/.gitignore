@@ -1,0 +1,40 @@
+# Build
+bin/
+obj/
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+
+# Rider
+.idea/
+
+# Logs
+*.log
+
+# OS
+Thumbs.db
+.DS_Store
+
+# User Secrets
+secrets.json
+
+# Publish
+publish/
+
+# Test Results
+TestResults/
+
+# Packages
+packages/
+
+# Environment
+.env
+.env.*
+
+# NuGet
+*.nupkg
+
+# Local configuration
+appsettings.Development.json
