@@ -24,13 +24,23 @@ public class ComprasController : ControllerBase
             return BadRequest("A descrição da compra é obrigatória.");
         }
 
-        var resposta = await _aiService.AnalisarCompraAsync(
-            request.Descricao,
-            request.ValorEstimado,
-            request.Departamento);
+        if (request.ValorEstimado <= 0)
+        {
+            return BadRequest("Informe um valor estimado maior que zero.");
+        }
+
+        if (string.IsNullOrWhiteSpace(request.Departamento))
+        {
+            return BadRequest("O departamento é obrigatório.");
+        }
 
         try
         {
+            var resposta = await _aiService.AnalisarCompraAsync(
+                request.Descricao,
+                request.ValorEstimado,
+                request.Departamento);
+
             var resultado = JsonSerializer.Deserialize<CompraResponse>(
                 resposta,
                 new JsonSerializerOptions
@@ -38,19 +48,22 @@ public class ComprasController : ControllerBase
                     PropertyNameCaseInsensitive = true
                 });
 
-            if (resultado is null)
+            if (resultado == null)
             {
-                return BadRequest("A IA retornou uma resposta inválida.");
+                return StatusCode(500, new
+                {
+                    erro = "Não foi possível interpretar a resposta da IA.",
+                    respostaRecebida = resposta
+                });
             }
 
             return Ok(resultado);
         }
-        catch
+        catch (Exception ex)
         {
-            return BadRequest(new
+            return StatusCode(500, new
             {
-                erro = "Não foi possível interpretar a resposta da IA.",
-                resposta
+                erro = ex.Message
             });
         }
     }

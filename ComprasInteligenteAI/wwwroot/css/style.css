@@ -33,15 +33,12 @@ textarea {
         box-shadow: 0 8px 20px rgba(13, 110, 253, .25);
     }
 
-#resultado {
-    display: none;
-}
-
 .resultado-card {
     border-radius: 12px;
     padding: 18px;
     color: white;
     margin-bottom: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, .08);
 }
 
 .categoria {
@@ -61,7 +58,7 @@ textarea {
     border-radius: 12px;
     padding: 20px;
     margin-top: 20px;
-    box-shadow: 0 4px 10px rgba(0,0,0,.08);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, .08);
 }
 
 .spinner-border {
@@ -76,7 +73,7 @@ footer {
     font-size: .9rem;
 }
 
-@media (max-width:768px) {
+@media (max-width: 768px) {
 
     .card-body {
         padding: 20px;

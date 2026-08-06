@@ -50,17 +50,34 @@ public class GroqService
                 "Bearer",
                 _settings.ApiKey);
 
-        var response = await _httpClient.PostAsync(
-            "https://api.groq.com/openai/v1/chat/completions",
-            content);
+        try
+        {
+            var response = await _httpClient.PostAsync(
+                "https://api.groq.com/openai/v1/chat/completions",
+                content);
 
-        response.EnsureSuccessStatusCode();
+            var responseContent = await response.Content.ReadAsStringAsync();
 
-        var responseJson = await response.Content.ReadAsStringAsync();
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception(
+                    $"Erro ao consultar a API da Groq: {responseContent}");
+            }
 
-        var resultado = JsonSerializer.Deserialize<GroqResponse>(responseJson);
+            var resultado = JsonSerializer.Deserialize<GroqResponse>(
+                responseContent,
+                new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
 
-        return resultado?.Choices.FirstOrDefault()?.Message.Content
-               ?? "Não foi possível gerar uma resposta.";
+            return resultado?.Choices.FirstOrDefault()?.Message.Content
+                   ?? "A IA não retornou uma resposta.";
+        }
+        catch (Exception ex)
+        {
+            throw new Exception(
+                $"Falha na comunicação com a IA. {ex.Message}");
+        }
     }
 }

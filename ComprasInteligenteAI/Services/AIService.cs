@@ -15,7 +15,7 @@ public class AIService
         _groqService = groqService;
     }
 
-    // Prepara o prompt e solicita a análise da IA.
+    // Coordena todo o fluxo de análise da solicitação.
     public async Task<string> AnalisarCompraAsync(
         string descricao,
         decimal valorEstimado,
@@ -26,6 +26,15 @@ public class AIService
             valorEstimado,
             departamento);
 
-        return await _groqService.GerarRespostaAsync(prompt);
+        var resposta = await _groqService.GerarRespostaAsync(prompt);
+
+        // Alguns modelos retornam o JSON dentro de blocos Markdown.
+        resposta = resposta
+            .Replace("```json", "")
+            .Replace("```JSON", "")
+            .Replace("```", "")
+            .Trim();
+
+        return resposta;
     }
 }
