@@ -4,11 +4,11 @@ using ComprasInteligenteAI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Configuração da IA
+// Carrega as configurações da IA definidas no appsettings.json.
 builder.Services.Configure<AISettings>(
     builder.Configuration.GetSection("AISettings"));
 
-// Registro dos serviços
+// Registro dos serviços utilizados pela aplicação.
 builder.Services.AddScoped<PromptBuilder>();
 builder.Services.AddScoped<AIService>();
 builder.Services.AddHttpClient<GroqService>();
@@ -26,6 +26,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+// Permite servir o frontend (index.html, css e js).
 app.UseDefaultFiles();
 app.UseStaticFiles();
 

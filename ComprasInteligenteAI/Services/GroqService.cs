@@ -20,7 +20,7 @@ public class GroqService
         _settings = options.Value;
     }
 
-    // Envia o prompt para a API da Groq e retorna a resposta da IA.
+    // Envia o prompt para a API da Groq e devolve a resposta da IA.
     public async Task<string> GerarRespostaAsync(string prompt)
     {
         var request = new GroqRequest
@@ -40,7 +40,7 @@ public class GroqService
 
         var json = JsonSerializer.Serialize(request);
 
-        var content = new StringContent(
+        using var content = new StringContent(
             json,
             Encoding.UTF8,
             "application/json");
@@ -72,12 +72,12 @@ public class GroqService
                 });
 
             return resultado?.Choices.FirstOrDefault()?.Message.Content
-                   ?? "A IA não retornou uma resposta.";
+                   ?? "A IA não retornou nenhuma resposta.";
         }
         catch (Exception ex)
         {
             throw new Exception(
-                $"Falha na comunicação com a IA. {ex.Message}");
+                $"Falha ao comunicar com a API da Groq. {ex.Message}");
         }
     }
 }

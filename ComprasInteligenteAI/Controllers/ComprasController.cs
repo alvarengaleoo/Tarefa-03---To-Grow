@@ -16,6 +16,7 @@ public class ComprasController : ControllerBase
         _aiService = aiService;
     }
 
+    // Recebe a solicitação de compra e retorna a análise gerada pela IA.
     [HttpPost("analisar")]
     public async Task<IActionResult> Analisar([FromBody] CompraRequest request)
     {
@@ -41,6 +42,12 @@ public class ComprasController : ControllerBase
                 request.ValorEstimado,
                 request.Departamento);
 
+            // Exibe exatamente o que a IA retornou.
+            Console.WriteLine("========================================");
+            Console.WriteLine("RESPOSTA DA IA:");
+            Console.WriteLine(resposta);
+            Console.WriteLine("========================================");
+
             var resultado = JsonSerializer.Deserialize<CompraResponse>(
                 resposta,
                 new JsonSerializerOptions
@@ -52,12 +59,20 @@ public class ComprasController : ControllerBase
             {
                 return StatusCode(500, new
                 {
-                    erro = "Não foi possível interpretar a resposta da IA.",
-                    respostaRecebida = resposta
+                    erro = "A IA retornou uma resposta, mas não foi possível convertê-la para o formato esperado.",
+                    respostaIA = resposta
                 });
             }
 
             return Ok(resultado);
+        }
+        catch (JsonException ex)
+        {
+            return StatusCode(500, new
+            {
+                erro = "Erro ao interpretar o JSON retornado pela IA.",
+                detalhe = ex.Message
+            });
         }
         catch (Exception ex)
         {

@@ -10,7 +10,7 @@ public class GroqRequest
     [JsonPropertyName("messages")]
     public List<GroqMessage> Messages { get; set; } = new();
 
-    // Limita a quantidade de tokens para controlar custo.
+    // Define o limite máximo de tokens da resposta.
     [JsonPropertyName("max_tokens")]
     public int MaxTokens { get; set; }
 
