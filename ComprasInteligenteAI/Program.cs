@@ -8,12 +8,13 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.Configure<AISettings>(
     builder.Configuration.GetSection("AISettings"));
 
-// Registro dos serviços da aplicação
+// Registro dos serviços
 builder.Services.AddScoped<PromptBuilder>();
 builder.Services.AddScoped<AIService>();
 builder.Services.AddHttpClient<GroqService>();
 
 builder.Services.AddControllers();
+
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
@@ -24,6 +25,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseDefaultFiles();
+app.UseStaticFiles();
 
 app.UseAuthorization();
 
